@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food AI Assistant</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+    <main class="chat-wrapper">
+        <section class="hero" id="hero">
+            <div class="logo">🍜</div>
+            <h1>Food AI Assistant</h1>
+            <p>Ask for meals based on your budget, ingredients, or preferences.</p>
+        </section>
+
+        <section class="chat" id="chat">
+            <div class="message assistant-message">
+                <div class="avatar">🍜</div>
+                <div class="bubble">
+                    Hi! What kind of meal are you looking for today?
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <form class="input-area" id="chatForm">
+        <div class="input-box">
+            <textarea
+                id="messageInput"
+                rows="1"
+                placeholder="Message Food AI Assistant..."
+            ></textarea>
+
+            <button type="submit" id="sendButton">
+                ➜
+            </button>
+        </div>
+    </form>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
