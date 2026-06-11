@@ -1,0 +1,24 @@
+{
+  "users" : [ {
+    "username" : "admin",
+    "password" : "admin123",
+    "isAdmin" : true,
+    "likes" : [ ],
+    "allergies" : [ ],
+    "diet" : "none"
+  }, {
+    "username" : "khoa",
+    "password" : "Khoa@1234",
+    "isAdmin" : false,
+    "likes" : [ "Chicken", "rice" ],
+    "allergies" : [ "Shrimp" ],
+    "diet" : "low-carb"
+  }, {
+    "username" : "huy",
+    "password" : "1234",
+    "isAdmin" : false,
+    "likes" : [ "dick" ],
+    "allergies" : [ "milk" ],
+    "diet" : "vegan"
+  } ]
+}

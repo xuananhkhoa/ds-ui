@@ -1,0 +1,205 @@
+DISTRIBUTED SYSTEMS PROJECT — MULTI INDEX FOOD SEARCH WITH LLM
+==========================================================
+
+CURRENT STATE (END OF PHASE 1)
+------------------------------
+Project hiện tại là một hệ thống distributed search engine mini cho domain Food.
+Người dùng nhập:
+- Nguyên liệu
+- Tên món
+- Keyword
+
+Hệ thống sẽ:
+1. Search distributed qua nhiều node
+2. Aggregate kết quả
+3. Rank kết quả
+4. Trả về món ăn phù hợp
+5. Detect nguyên liệu còn thiếu
+
+CURRENT ARCHITECTURE
+--------------------
+Client
+   |
+   v
+Coordinator (8080)
+   |
+   +--------------------+
+   |                    |
+   v                    v
+LLM Node     Dish Node
+(8081)              (8082)
+
+RESPONSIBILITIES
+----------------
+
+1. Coordinator
+Vai trò:
+- Nhận request từ client
+- Orchestration
+- Gọi các node
+- Merge result
+- Ranking
+- Fault tolerance cơ bản
+
+Coordinator KHÔNG:
+- Giữ full dataset
+- Tự search data
+
+Coordinator chỉ:
+- Route + Aggregate
+
+2. Ingredient Node
+Vai trò:
+- Giữ inverted index theo ingredient
+- Search dishes theo nguyên liệu
+
+Structure:
+- ingredient -> list of dishes
+
+Ví dụ:
+- egg -> Fried Rice, Omelette
+- rice -> Fried Rice
+
+Endpoint: POST /ingredient/search
+Input: {"ingredients": ["egg", "rice"]}
+Output: [{"dishName": "Fried Rice", "matchedCount": 2}]
+
+3. Dish Node
+Vai trò:
+- Giữ full dish detail
+- Trả thông tin món ăn
+
+Endpoint: GET /dish/{dishName}
+Output:
+{
+  "id": 1,
+  "name": "Fried Rice",
+  "ingredients": ["rice", "egg", "onion", "soy sauce"],
+  "tags": ["asian", "quick"]
+}
+
+CURRENT FLOW
+------------
+STEP 1 — Client Request: POST /search
+Body: {"ingredients": ["egg", "rice", "onion"]}
+
+STEP 2 — Coordinator Normalize Query
+- Lowercase
+- Remove duplicates
+
+STEP 3 — Coordinator -> Ingredient Node
+- Coordinator call: http://localhost:8081/ingredient/search
+- Ingredient Node: search inverted index, count matched ingredients, return ranked candidate dishes.
+
+STEP 4 — Coordinator -> Dish Node
+- Coordinator call: http://localhost:8082/dish/{dishName}
+- Dish Node: return full dish detail.
+
+STEP 5 — Coordinator Aggregate
+- Calculate missing ingredients
+- Calculate score
+- Merge final result
+
+CURRENT SCORING
+---------------
+score = matchedIngredients / totalDishIngredients
+Ví dụ: matched = 3, total = 4 -> score = 0.75
+
+CURRENT RESPONSE
+----------------
+[
+  {
+    "dish": "Fried Rice",
+    "matchScore": 0.75,
+    "missingIngredients": ["soy sauce"]
+  }
+]
+
+CURRENT PROJECT STRUCTURE
+-------------------------
+coordinator/
+    controller/ - SearchController.java
+    service/ - CoordinatorService.java
+    config/ - RestTemplateConfig.java
+
+ingredient-node/
+    controller/
+    service/
+    model/
+    (Inverted index & search logic)
+
+dish-node/
+    controller/
+    service/
+    model/
+    (Dish detail retrieval)
+
+shared/
+    model/
+    (Shared DTOs: Dish, IngredientSearchRequest, IngredientSearchResult, FinalSearchResponse)
+
+CURRENT DATASET
+---------------
+Dataset hardcoded/simple JSON style.
+Example dishes: Fried Rice, Omelette, Shakshuka, etc.
+
+CURRENT DISTRIBUTED FEATURES
+----------------------------
+- Multi-service architecture: OK
+- Distributed query flow: OK
+- Coordinator pattern: OK
+- REST communication: OK
+- Inverted index: OK
+- Search ranking: OK
+- Aggregation: OK
+- Missing ingredient detection: OK
+- Fault tolerance basic: OK
+
+CURRENT FAULT TOLERANCE
+-----------------------
+Coordinator sử dụng try-catch để xử lý lỗi node.
+Nếu Dish Node lỗi: Coordinator vẫn chạy, trả về kết quả từng phần (partial results).
+
+IMPORTANT DESIGN DECISIONS
+--------------------------
+- Coordinator KHÔNG sở hữu data.
+- Ý đồ thiết kế tập trung vào distributed systems architecture (Routing & Orchestration).
+
+NEXT TARGET — PHASE 2
+---------------------
+Mục tiêu: Chuyển từ single-index distributed search sang multi-index distributed search engine.
+
+PHASE 2 PLAN:
+- Thêm index/node mới:
+  + Ingredient Node: ingredient index
+  + Dish Node: dish name index
+  + Cuisine/Tag Node: cuisine/tag index
+  + Future: Vector Node (semantic search)
+
+TARGET PHASE 2 FLOW:
+- Coordinator query nhiều index đồng thời.
+- Merge scores và combine ranking.
+- Ví dụ query "spicy egg breakfast" sẽ được route đến cả Ingredient Node và Tag Node.
+
+FUTURE PHASE 3 (LLM)
+--------------------
+- LLM query understanding (Ví dụ: "healthy cheap quick dinner").
+- LLM extraction các thực thể để Coordinator route query.
+- Embeddings, semantic search, vector retrieval.
+
+CURRENT TECH STACK
+------------------
+- Backend: Spring Boot
+- Communication: REST
+- Build Tool: Maven
+- Architecture: Distributed Services
+
+CURRENT PORTS
+-------------
+- Coordinator: 8080
+- Ingredient Node: 8081
+- Dish Node: 8082
+
+NOTE CHO PHASE 2
+----------------
+KHÔNG gộp service, KHÔNG đưa data về Coordinator. Giữ vững distributed architecture.
