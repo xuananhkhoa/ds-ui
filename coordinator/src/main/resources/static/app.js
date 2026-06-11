@@ -7,7 +7,9 @@ const loginForm = document.getElementById("loginForm");
 const registerForm = document.getElementById("registerForm");
 const loginMessage = document.getElementById("loginMessage");
 const registerMessage = document.getElementById("registerMessage");
+const adminChatButton = document.getElementById("adminChatButton");
 const adminLogoutButton = document.getElementById("adminLogoutButton");
+const chatDashboardButton = document.getElementById("chatDashboardButton");
 const userLogoutButton = document.getElementById("userLogoutButton");
 const registeredUserCount = document.getElementById("registeredUserCount");
 const adminUsername = document.getElementById("adminUsername");
@@ -15,7 +17,6 @@ const dishForm = document.getElementById("dishForm");
 const dishMessage = document.getElementById("dishMessage");
 const dishList = document.getElementById("dishList");
 const userGreeting = document.getElementById("userGreeting");
-const profileSummary = document.getElementById("profileSummary");
 const chat = document.getElementById("chat");
 const chatForm = document.getElementById("chatForm");
 const messageInput = document.getElementById("messageInput");
@@ -49,6 +50,8 @@ function bindEvents() {
     loginForm.addEventListener("submit", handleLogin);
     registerForm.addEventListener("submit", handleRegister);
     dishForm.addEventListener("submit", handleDishSubmit);
+    adminChatButton.addEventListener("click", () => showChat(currentUser));
+    chatDashboardButton.addEventListener("click", () => showAdminDashboard(currentUser));
     adminLogoutButton.addEventListener("click", logout);
     userLogoutButton.addEventListener("click", logout);
     chatForm.addEventListener("submit", handleChatSubmit);
@@ -286,29 +289,7 @@ function showChat(user) {
     chatView.classList.remove("hidden");
 
     userGreeting.textContent = `Welcome, ${user.username}`;
-    renderProfileSummary(user);
-}
-
-function renderProfileSummary(user) {
-    profileSummary.innerHTML = "";
-
-    const items = [
-        ["Likes", formatList(user.likes)],
-        ["Allergies", formatList(user.allergies)],
-        ["Diet", user.diet || "none"]
-    ];
-
-    items.forEach(([label, value]) => {
-        const item = document.createElement("div");
-        const labelEl = document.createElement("span");
-        const valueEl = document.createElement("strong");
-
-        labelEl.textContent = label;
-        valueEl.textContent = value;
-        item.appendChild(labelEl);
-        item.appendChild(valueEl);
-        profileSummary.appendChild(item);
-    });
+    chatDashboardButton.classList.toggle("hidden", !user.isAdmin);
 }
 
 function formatList(value) {

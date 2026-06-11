@@ -173,6 +173,12 @@ textarea {
   font-size: 22px;
 }
 
+.topbar-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
 .dashboard {
   width: min(100%, 960px);
   margin: 0 auto;
@@ -190,16 +196,14 @@ textarea {
   margin-top: 20px;
 }
 
-.stat-card,
-.profile-summary {
+.stat-card {
   background: var(--bg-soft);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 16px;
 }
 
-.stat-card span,
-.profile-summary span {
+.stat-card span {
   display: block;
   color: var(--text-muted);
   font-size: 13px;
@@ -263,19 +267,6 @@ textarea {
   max-width: 860px;
   margin: 0 auto;
   padding: 24px 18px 44px;
-}
-
-.profile-summary {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin-bottom: 24px;
-}
-
-.profile-summary strong {
-  display: block;
-  margin-top: 5px;
-  font-size: 14px;
 }
 
 .chat {
@@ -399,8 +390,7 @@ textarea {
     flex-direction: column;
   }
 
-  .stats-row,
-  .profile-summary {
+  .stats-row {
     grid-template-columns: 1fr;
   }
 

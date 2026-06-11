@@ -74,7 +74,10 @@
                 <div class="eyebrow">Admin</div>
                 <h1>Dashboard</h1>
             </div>
-            <button class="secondary-button" id="adminLogoutButton" type="button">Logout</button>
+            <div class="topbar-actions">
+                <button class="secondary-button" id="adminChatButton" type="button">Chat</button>
+                <button class="secondary-button" id="adminLogoutButton" type="button">Logout</button>
+            </div>
         </header>
 
         <main class="dashboard">
@@ -124,12 +127,13 @@
                 <div class="eyebrow">Food AI Assistant</div>
                 <h1 id="userGreeting">Welcome</h1>
             </div>
-            <button class="secondary-button" id="userLogoutButton" type="button">Logout</button>
+            <div class="topbar-actions">
+                <button class="secondary-button hidden" id="chatDashboardButton" type="button">Dashboard</button>
+                <button class="secondary-button" id="userLogoutButton" type="button">Logout</button>
+            </div>
         </header>
 
         <main class="chat-wrapper">
-            <section class="profile-summary" id="profileSummary"></section>
-
             <section class="chat" id="chat">
                 <div class="message assistant-message">
                     <div class="avatar">AI</div>
