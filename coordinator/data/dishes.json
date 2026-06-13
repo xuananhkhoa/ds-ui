@@ -1,8 +1,14 @@
 {
-  "dishes" : [ {
-    "id" : "ae02616e-f18e-4c4a-9852-6a5dec04b2ff",
-    "name" : "Pho",
+  "ae02616e-f18e-4c4a-9852-6a5dec04b2ff" : {
+    "instructions" : "add pho and add beef",
     "ingredients" : [ "Pho", "beef" ],
-    "cookingMethod" : "add pho and add beef"
-  } ]
+    "title" : "Pho",
+    "picture_link" : null
+  },
+  "VTFpbs7u8MDQLFlKoWvOMLyEHvS" : {
+    "instructions" : "Use old day rice",
+    "ingredients" : [ "Rice", "Egg", "Soy sauce", "oil" ],
+    "title" : "Egg Fried Rice",
+    "picture_link" : null
+  }
 }

@@ -236,9 +236,10 @@ async function handleDishSubmit(event) {
 
     try {
         await postJson("/api/dishes", {
-            name,
+            title: name,
             ingredients,
-            cookingMethod
+            instructions: cookingMethod,
+            picture_link: null
         });
         dishForm.reset();
         dishMessage.textContent = "Dish saved.";
@@ -274,13 +275,13 @@ function renderDishes(dishes) {
         item.classList.add("dish-item");
 
         const title = document.createElement("h4");
-        title.textContent = dish.name;
+        title.textContent = dish.title || dish.name;
 
         const ingredients = document.createElement("p");
         ingredients.innerHTML = `<strong>Ingredients:</strong> ${formatList(dish.ingredients)}`;
 
         const cookingMethod = document.createElement("p");
-        cookingMethod.innerHTML = `<strong>Way to cook:</strong> ${dish.cookingMethod || "none"}`;
+        cookingMethod.innerHTML = `<strong>Way to cook:</strong> ${dish.instructions || dish.cookingMethod || "none"}`;
 
         item.appendChild(title);
         item.appendChild(ingredients);
